@@ -1,7 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // Ensure Prisma + bcrypt work in serverless functions
+  serverExternalPackages: ["@prisma/client", "prisma", "bcryptjs"],
 };
 
 export default nextConfig;

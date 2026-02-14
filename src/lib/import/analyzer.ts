@@ -121,6 +121,12 @@ Important:
 - If the church uses richer categories than Shepherd defaults (e.g. "Active Member", "Associate Member", "Prospective"), recommend they keep their own and explain why
 - Be specific about what each recommendation means for the church`;
 
+  // If no API key is configured, fall back to heuristic analysis
+  if (!process.env.ANTHROPIC_API_KEY) {
+    console.warn("ANTHROPIC_API_KEY not set — using heuristic file analysis");
+    return fallbackAnalysis(headers, sampleRows, uniqueValues);
+  }
+
   try {
     const { text } = await generateText({
       model: anthropic("claude-sonnet-4-5-20250929"),

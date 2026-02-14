@@ -29,9 +29,9 @@ export function PersonForm({
 
   return (
     <form action={formAction} className="max-w-2xl space-y-6">
-      {error && (
+      {error != null && (
         <div className="bg-red-500/10 border border-red-500/20 text-red-400 text-sm px-4 py-3 rounded-lg">
-          {String(error)}
+          {String(error) as string}
         </div>
       )}
 

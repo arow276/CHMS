@@ -246,3 +246,70 @@ enum AttendanceStatus {
   ABSENT
   LATE
 }
+
+// ──────────────────────────────────────────────
+// IMPORT & INTEGRATION MODELS
+// ──────────────────────────────────────────────
+
+model CategoryDefinition {
+  id        String  @id @default(cuid())
+  category  String  // "person_status", "group_type", "event_type", "household_role", "group_member_role"
+  value     String  // Internal value stored in records
+  label     String  // Church's display label
+  description String?
+  color     String? // Optional hex color for UI
+  icon      String? // Optional icon name
+  isDefault Boolean @default(false)
+  isSystem  Boolean @default(false) // System categories can't be deleted
+  sortOrder Int     @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([category, value])
+  @@index([category])
+}
+
+model ChmsConnector {
+  id          String  @id @default(cuid())
+  platform    String  // "planning_center", "breeze", "ccb", "elvanto", "rock_rms", "fellowship_one", "ministry_platform"
+  displayName String
+  credentials Json    // OAuth tokens, API keys (encrypted at rest via app layer)
+  status      String  @default("disconnected") // "connected", "disconnected", "syncing", "error"
+  lastSyncAt  DateTime?
+  lastError   String?
+  config      Json    @default("{}")
+  syncSchedule String? // "manual", "daily", "weekly"
+
+  importJobs ImportJob[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([platform])
+}
+
+model ImportJob {
+  id             String  @id @default(cuid())
+  source         String  // "file_upload", "planning_center", "breeze", etc.
+  fileName       String?
+  status         String  @default("pending") // "pending", "analyzing", "mapped", "reviewing", "importing", "complete", "error"
+  totalRows      Int     @default(0)
+  importedRows   Int     @default(0)
+  skippedRows    Int     @default(0)
+  errorRows      Int     @default(0)
+  columnMapping  Json?   // { sourceColumn: { targetField, transform? } }
+  categoryMapping Json?  // { sourceCategory: { sourceValue: mappedValue } }
+  aiAnalysis     Json?   // Full AI analysis: detected types, recommendations, confidence
+  errors         Json?   // Array of { row, field, message }
+  importedData   Json?   // Summary of what was imported
+
+  connectorId String?
+  connector   ChmsConnector? @relation(fields: [connectorId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status])
+  @@index([source])
+}

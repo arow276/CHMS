@@ -17,20 +17,20 @@ export default function Home() {
             <span className="text-lg font-semibold tracking-tight">Shepherd</span>
           </div>
           <div className="flex items-center gap-6">
-            <a href="#problem" className="text-sm text-zinc-400 hover:text-zinc-200 transition-colors hidden sm:block">
-              Why Shepherd
+            <a href="/features" className="text-sm text-zinc-400 hover:text-zinc-200 transition-colors hidden sm:block">
+              Features
             </a>
-            <a href="#interface" className="text-sm text-zinc-400 hover:text-zinc-200 transition-colors hidden sm:block">
-              Interface
+            <a href="/pricing" className="text-sm text-zinc-400 hover:text-zinc-200 transition-colors hidden sm:block">
+              Pricing
             </a>
-            <a href="#warmth" className="text-sm text-zinc-400 hover:text-zinc-200 transition-colors hidden sm:block">
-              Warmth
+            <a href="/about" className="text-sm text-zinc-400 hover:text-zinc-200 transition-colors hidden sm:block">
+              About
             </a>
             <a
-              href="#cta"
+              href="/pricing"
               className="text-sm font-medium px-4 py-2 rounded-full bg-amber-500 text-zinc-950 hover:bg-amber-400 transition-colors"
             >
-              Get Early Access
+              Get Started
             </a>
           </div>
         </div>
@@ -65,19 +65,19 @@ export default function Home() {
 
           <div className="flex items-center justify-center gap-4">
             <a
-              href="#cta"
+              href="/pricing"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-amber-500 text-zinc-950 font-semibold hover:bg-amber-400 transition-colors"
             >
-              Get Early Access
+              Start Free
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                 <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>
             </a>
             <a
-              href="#problem"
+              href="/features"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-zinc-700 text-zinc-300 font-medium hover:border-zinc-500 transition-colors"
             >
-              See why it&apos;s different
+              See all features
             </a>
           </div>
         </div>
@@ -369,19 +369,24 @@ export default function Home() {
               Your people deserve more<br />than a spreadsheet
             </h2>
             <p className="text-zinc-400 text-lg mb-10 max-w-xl mx-auto leading-relaxed">
-              Shepherd is currently in early development. Be among the first
-              churches to experience a relationship system that actually
-              understands relationships.
+              Start free with up to 75 members. No credit card required.
+              Upgrade when you need AI insights, warmth analytics, and more.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <a
-                href="#"
+                href="/pricing"
                 className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-amber-500 text-zinc-950 font-semibold text-lg hover:bg-amber-400 transition-colors"
               >
-                Join the Waitlist
+                See Plans &amp; Pricing
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                   <path d="M5 12h14M12 5l7 7-7 7" />
                 </svg>
+              </a>
+              <a
+                href="/about"
+                className="inline-flex items-center gap-2 px-8 py-4 rounded-full border border-zinc-700 text-zinc-300 font-medium hover:border-zinc-500 transition-colors"
+              >
+                Our Story
               </a>
             </div>
           </div>
@@ -389,19 +394,48 @@ export default function Home() {
       </section>
 
       {/* ─── Footer ─── */}
-      <footer className="border-t border-zinc-800/50 py-10 px-6">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded bg-gradient-to-br from-amber-500 to-red-500 flex items-center justify-center">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
-                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-              </svg>
+      <footer className="border-t border-zinc-800/50 py-12 px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-6 h-6 rounded bg-gradient-to-br from-amber-500 to-red-500 flex items-center justify-center">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                  </svg>
+                </div>
+                <span className="text-sm font-medium">Shepherd</span>
+              </div>
+              <p className="text-xs text-zinc-600 leading-relaxed">
+                People, not paperwork.<br />Relationships, not records.
+              </p>
             </div>
-            <span className="text-sm font-medium text-zinc-400">Shepherd</span>
+            <div>
+              <h4 className="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-3">Product</h4>
+              <div className="space-y-2">
+                <a href="/features" className="block text-sm text-zinc-500 hover:text-zinc-300 transition-colors">Features</a>
+                <a href="/pricing" className="block text-sm text-zinc-500 hover:text-zinc-300 transition-colors">Pricing</a>
+                <a href="/login" className="block text-sm text-zinc-500 hover:text-zinc-300 transition-colors">Sign In</a>
+              </div>
+            </div>
+            <div>
+              <h4 className="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-3">Company</h4>
+              <div className="space-y-2">
+                <a href="/about" className="block text-sm text-zinc-500 hover:text-zinc-300 transition-colors">About</a>
+                <a href="mailto:hello@shepherd.church" className="block text-sm text-zinc-500 hover:text-zinc-300 transition-colors">Contact</a>
+              </div>
+            </div>
+            <div>
+              <h4 className="text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-3">Legal</h4>
+              <div className="space-y-2">
+                <a href="#" className="block text-sm text-zinc-500 hover:text-zinc-300 transition-colors">Privacy Policy</a>
+                <a href="#" className="block text-sm text-zinc-500 hover:text-zinc-300 transition-colors">Terms of Service</a>
+              </div>
+            </div>
           </div>
-          <p className="text-xs text-zinc-600">
-            People, not paperwork. Relationships, not records.
-          </p>
+          <div className="border-t border-zinc-800/50 pt-6 text-center">
+            <p className="text-xs text-zinc-600">&copy; 2025 Shepherd. All rights reserved.</p>
+          </div>
         </div>
       </footer>
     </div>

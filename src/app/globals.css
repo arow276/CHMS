@@ -109,3 +109,42 @@ html {
 .stagger-3 { animation-delay: 0.3s; }
 .stagger-4 { animation-delay: 0.4s; }
 .stagger-5 { animation-delay: 0.5s; }
+
+/* ─────────── "Easy Mode" — for the admin assistant who hates tech ─────────── */
+/* Larger touch targets, generous line-height, calmer contrast.                */
+
+.easy {
+  font-size: 18px;
+  line-height: 1.55;
+}
+.easy h1 { font-size: 2.25rem; line-height: 1.1; letter-spacing: -0.02em; }
+.easy h2 { font-size: 1.5rem; line-height: 1.2; letter-spacing: -0.01em; }
+.easy button,
+.easy .btn,
+.easy a.btn,
+.easy input[type="text"],
+.easy input[type="email"],
+.easy input[type="tel"],
+.easy input[type="url"],
+.easy input[type="color"],
+.easy textarea,
+.easy select {
+  min-height: 48px;
+  font-size: 18px;
+}
+
+@keyframes confetti-pop {
+  0% { transform: scale(0.9); opacity: 0; }
+  50% { transform: scale(1.04); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.animate-confetti-pop { animation: confetti-pop 0.45s ease-out both; }
+
+@keyframes check-draw {
+  from { stroke-dashoffset: 24; }
+  to { stroke-dashoffset: 0; }
+}
+.animate-check-draw {
+  stroke-dasharray: 24;
+  animation: check-draw 0.5s ease-out 0.15s both;
+}

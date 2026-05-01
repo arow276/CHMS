@@ -326,6 +326,101 @@ async function main() {
   await prisma.attendance.createMany({ data: attendanceData });
   console.log("  Created attendance records");
 
+  // Default church brand — this drives the auto-generated website
+  const existingChurch = await prisma.church.findFirst();
+  if (!existingChurch) {
+    await prisma.church.create({
+      data: {
+        name: "Grace Community Church",
+        slug: "grace-community",
+        tagline: "A place to belong.",
+        mission:
+          "Loving God. Loving our neighbors. Building one another up in faith and hope.",
+        about:
+          "Grace Community Church has been a home for our neighborhood since 1962. " +
+          "We're an intergenerational church family that believes the best way to grow " +
+          "is shoulder-to-shoulder — over coffee, around the dinner table, and through " +
+          "serving together.",
+        primaryColor: "#0EA5E9",
+        accentColor: "#F59E0B",
+        bgColor: "#FFFFFF",
+        textColor: "#0F172A",
+        address: "123 Main Street",
+        city: "Anywhere",
+        state: "USA",
+        zip: "00000",
+        phone: "(555) 123-4567",
+        email: "hello@gracecommunity.example",
+        serviceTimes: "Sundays at 9am & 11am",
+        publishSite: true,
+      },
+    });
+    console.log("  Created default church brand");
+  }
+
+  // Demo gatherings — these populate the public website out of the box
+  const upcomingSunday = (() => {
+    const d = new Date();
+    d.setHours(10, 0, 0, 0);
+    d.setDate(d.getDate() + ((7 - d.getDay()) % 7 || 7));
+    return d;
+  })();
+  const easterPicnic = new Date(upcomingSunday);
+  easterPicnic.setDate(easterPicnic.getDate() + 7);
+  easterPicnic.setHours(17, 0, 0, 0);
+  const youthNight = new Date(upcomingSunday);
+  youthNight.setDate(youthNight.getDate() + 4);
+  youthNight.setHours(19, 0, 0, 0);
+
+  const gatheringCount = await prisma.gathering.count();
+  if (gatheringCount === 0) {
+    await prisma.gathering.create({
+      data: {
+        name: "Sunday Worship",
+        category: "WORSHIP_SERVICE",
+        startsAt: upcomingSunday,
+        location: "The Sanctuary",
+        summary:
+          "Join us for singing, scripture, and a message of hope. Coffee and donuts before the service.",
+        isPublic: true,
+        isPublished: true,
+      },
+    });
+    const picnic = await prisma.gathering.create({
+      data: {
+        name: "Spring Picnic",
+        category: "EVENT",
+        startsAt: easterPicnic,
+        location: "Riverside Park, Pavilion 3",
+        summary:
+          "Burgers, hot dogs, and games for the whole family. Bring a side to share.",
+        registrationOpen: true,
+        capacity: 120,
+        isPublic: true,
+        isPublished: true,
+      },
+    });
+    await prisma.volunteerRole.createMany({
+      data: [
+        { name: "Grill Cook", slotsNeeded: 4, gatheringId: picnic.id },
+        { name: "Set-up Crew", slotsNeeded: 6, gatheringId: picnic.id },
+        { name: "Clean-up Crew", slotsNeeded: 6, gatheringId: picnic.id },
+      ],
+    });
+    await prisma.gathering.create({
+      data: {
+        name: "Youth Pizza Night",
+        category: "YOUTH",
+        startsAt: youthNight,
+        location: "Youth Room",
+        summary: "Pizza, games, and a short devotional. Grades 6-12 welcome.",
+        isPublic: true,
+        isPublished: true,
+      },
+    });
+    console.log("  Created demo gatherings");
+  }
+
   console.log("Seed complete!");
 }
 

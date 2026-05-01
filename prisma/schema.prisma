@@ -249,6 +249,170 @@ enum AttendanceStatus {
 }
 
 // ──────────────────────────────────────────────
+// CHURCH BRAND (one row per tenant)
+// Drives the auto-generated public website + app
+// ──────────────────────────────────────────────
+
+model Church {
+  id           String  @id @default(cuid())
+  name         String  @default("Our Church")
+  slug         String  @unique @default("our-church")
+  tagline      String?
+  mission      String?
+  about        String?
+  logoUrl      String?
+  primaryColor String  @default("#0EA5E9")
+  accentColor  String  @default("#F59E0B")
+  bgColor      String  @default("#FFFFFF")
+  textColor    String  @default("#0F172A")
+  fontFamily   String  @default("Inter")
+  address      String?
+  city         String?
+  state        String?
+  zip          String?
+  phone        String?
+  email        String?
+  websiteUrl   String?
+  facebookUrl  String?
+  instagramUrl String?
+  youtubeUrl   String?
+  serviceTimes String?
+  publishSite  Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ──────────────────────────────────────────────
+// UNIFIED GATHERING
+// One model = events + calendar + registration + volunteers
+// ──────────────────────────────────────────────
+
+model Gathering {
+  id          String            @id @default(cuid())
+  name        String
+  summary     String?
+  description String?
+  category    GatheringCategory @default(EVENT)
+  startsAt    DateTime
+  endsAt      DateTime?
+  allDay      Boolean           @default(false)
+  recurrence  String?
+  location    String?
+  imageUrl    String?
+
+  isPublic    Boolean @default(true)
+  isPublished Boolean @default(true)
+
+  registrationOpen   Boolean   @default(false)
+  registrationCloses DateTime?
+  capacity           Int?
+  costCents          Int       @default(0)
+  customQuestions    Json?
+
+  registrations  Registration[]
+  volunteerRoles VolunteerRole[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([startsAt])
+  @@index([category])
+  @@index([isPublic])
+}
+
+enum GatheringCategory {
+  WORSHIP_SERVICE
+  EVENT
+  CLASS
+  SMALL_GROUP
+  MEETING
+  OUTREACH
+  KIDS
+  YOUTH
+  OTHER
+}
+
+model Registration {
+  id        String             @id @default(cuid())
+  firstName String
+  lastName  String
+  email     String?
+  phone     String?
+  partySize Int                @default(1)
+  notes     String?
+  answers   Json?
+  paid      Boolean            @default(false)
+  status    RegistrationStatus @default(CONFIRMED)
+
+  gatheringId String
+  gathering   Gathering @relation(fields: [gatheringId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([gatheringId])
+  @@index([email])
+}
+
+enum RegistrationStatus {
+  CONFIRMED
+  WAITLISTED
+  CANCELED
+}
+
+model VolunteerRole {
+  id          String  @id @default(cuid())
+  name        String
+  description String?
+  slotsNeeded Int     @default(1)
+
+  gatheringId String
+  gathering   Gathering @relation(fields: [gatheringId], references: [id], onDelete: Cascade)
+
+  signups VolunteerSignup[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([gatheringId])
+}
+
+model VolunteerSignup {
+  id        String  @id @default(cuid())
+  name      String
+  email     String?
+  phone     String?
+  notes     String?
+  confirmed Boolean @default(true)
+
+  roleId String
+  role   VolunteerRole @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([roleId])
+}
+
+// ──────────────────────────────────────────────
+// ASSISTANT MEMORY
+// Log of prompts the admin has run, used to show history & undo
+// ──────────────────────────────────────────────
+
+model AssistantAction {
+  id        String   @id @default(cuid())
+  prompt    String
+  intent    String
+  summary   String
+  status    String   @default("done")
+  meta      Json?
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+}
+
+// ──────────────────────────────────────────────
 // IMPORT & INTEGRATION MODELS
 // ──────────────────────────────────────────────
 

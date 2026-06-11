@@ -2,6 +2,9 @@ import Link from "next/link";
 import { getDashboardData } from "@/lib/dal/dashboard";
 import { WarmthBadge } from "@/components/app/warmth-badge";
 import { RecalculateButton } from "@/components/app/dashboard/recalculate-button";
+import { ColorChip } from "@/components/app/liturgy/color-chip";
+import { getTradition } from "@/lib/liturgy/traditions";
+import type { LiturgicalDay } from "@/lib/liturgy/types";
 import type { WarmthLevel } from "@prisma/client";
 
 const warmthOrder: WarmthLevel[] = ["HOT", "WARM", "LUKEWARM", "COOL", "COLD"];
@@ -32,6 +35,12 @@ export default async function DashboardPage() {
             + Sunday Service
           </Link>
           <Link
+            href="/liturgy/new"
+            className="px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-white text-sm rounded-lg transition-colors"
+          >
+            + Liturgy
+          </Link>
+          <Link
             href="/people/new"
             className="px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-white text-sm rounded-lg transition-colors"
           >
@@ -40,6 +49,69 @@ export default async function DashboardPage() {
           <RecalculateButton />
         </div>
       </div>
+
+      {/* Upcoming Liturgy */}
+      {data.upcomingLiturgy ? (
+        <Link
+          href={`/liturgy/${data.upcomingLiturgy.id}`}
+          className="flex flex-wrap items-center gap-x-4 gap-y-2 border border-zinc-800 hover:border-zinc-600 rounded-lg p-4 mb-6 transition-colors"
+        >
+          <div className="text-xs font-medium text-zinc-500 uppercase tracking-wider">
+            Upcoming Liturgy
+          </div>
+          <div className="flex-1 min-w-48">
+            <span className="text-sm font-medium text-white">
+              {data.upcomingLiturgy.title}
+            </span>
+            <span className="text-sm text-zinc-500 ml-2">
+              {(data.upcomingLiturgy.liturgicalDay as unknown as LiturgicalDay)?.dayName}
+              {" · "}
+              {new Date(data.upcomingLiturgy.date).toLocaleDateString("en-US", {
+                month: "long",
+                day: "numeric",
+                timeZone: "UTC",
+              })}
+              {" · "}
+              {getTradition(data.upcomingLiturgy.tradition)?.shortName ?? data.upcomingLiturgy.tradition}
+            </span>
+          </div>
+          <ColorChip
+            color={(data.upcomingLiturgy.liturgicalDay as unknown as LiturgicalDay)?.color ?? "none"}
+          />
+          <span
+            className={`text-xs px-2 py-0.5 rounded-full capitalize ${
+              data.upcomingLiturgy.status === "FINAL"
+                ? "bg-green-500/15 text-green-400"
+                : "bg-zinc-500/15 text-zinc-400"
+            }`}
+          >
+            {data.upcomingLiturgy.status.toLowerCase()}
+          </span>
+          <span className="text-sm text-amber-400">Open bulletin &rarr;</span>
+        </Link>
+      ) : (
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border border-zinc-800 rounded-lg p-4 mb-6">
+          <div className="text-xs font-medium text-zinc-500 uppercase tracking-wider">
+            This Sunday
+          </div>
+          <div className="flex-1 min-w-48">
+            <span className="text-sm font-medium text-white">{data.nextSundayDay.dayName}</span>
+            <span className="text-sm text-zinc-500 ml-2">
+              {new Date(`${data.nextSundayDay.iso}T00:00:00Z`).toLocaleDateString("en-US", {
+                month: "long",
+                day: "numeric",
+                timeZone: "UTC",
+              })}
+              {" · "}
+              {data.nextSundayDay.season}
+            </span>
+          </div>
+          <ColorChip color={data.nextSundayDay.color} />
+          <Link href="/liturgy/new" className="text-sm text-amber-400 hover:text-amber-300 transition-colors">
+            Plan this service &rarr;
+          </Link>
+        </div>
+      )}
 
       {/* Stat Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">

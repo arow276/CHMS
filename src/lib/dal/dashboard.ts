@@ -1,7 +1,10 @@
 import { db } from "@/lib/db";
+import { computeLiturgicalDay, nextSundayIso } from "@/lib/liturgy/calendar";
+import { getTradition } from "@/lib/liturgy/traditions";
 
 export async function getDashboardData() {
   const now = new Date();
+  const todayUtc = new Date(now.toISOString().slice(0, 10));
   const fourWeeksAgo = new Date();
   fourWeeksAgo.setDate(now.getDate() - 28);
   const eightWeeksAgo = new Date();
@@ -15,6 +18,8 @@ export async function getDashboardData() {
     recentVisitors,
     activeGroups,
     attendanceTrend,
+    upcomingLiturgy,
+    latestLiturgy,
   ] = await Promise.all([
     db.person.count({ where: { status: { not: "INACTIVE" } } }),
 
@@ -74,7 +79,31 @@ export async function getDashboardData() {
         _count: { select: { attendances: true } },
       },
     }),
+
+    db.liturgy.findFirst({
+      where: { date: { gte: todayUtc } },
+      orderBy: { date: "asc" },
+      select: {
+        id: true,
+        title: true,
+        date: true,
+        status: true,
+        tradition: true,
+        liturgicalDay: true,
+      },
+    }),
+
+    // Most recently touched liturgy — its tradition decides which calendar
+    // (Western vs. Byzantine) the "plan your next Sunday" teaser uses.
+    db.liturgy.findFirst({
+      orderBy: { updatedAt: "desc" },
+      select: { tradition: true },
+    }),
   ]);
+
+  const teaserCalendar =
+    (latestLiturgy && getTradition(latestLiturgy.tradition)?.calendar) ?? "western";
+  const nextSunday = nextSundayIso(now);
 
   // Get last Sunday's attendance
   const lastSunday = attendanceTrend.at(-1);
@@ -97,5 +126,11 @@ export async function getDashboardData() {
       date: e.date,
       count: e._count.attendances,
     })),
+    upcomingLiturgy,
+    nextSundayDay: { iso: nextSunday, ...pickTeaser(computeLiturgicalDay(nextSunday, teaserCalendar)) },
   };
+}
+
+function pickTeaser(day: { dayName: string; season: string; color: string }) {
+  return { dayName: day.dayName, season: day.season, color: day.color };
 }

@@ -13,6 +13,7 @@ import {
   Home,
   Network,
   ArrowRight,
+  BookOpen,
 } from "lucide-react";
 
 export default function FeaturesPage() {
@@ -123,6 +124,105 @@ export default function FeaturesPage() {
                 <p className="text-sm text-zinc-500 leading-relaxed">{feature.description}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Liturgy Builder */}
+      <section className="py-24 px-6 border-t border-zinc-800/50">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-16 items-center">
+            <div>
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-purple-500/20 bg-purple-500/5 mb-6">
+                <BookOpen className="w-3.5 h-3.5 text-purple-400" />
+                <span className="text-xs text-purple-400 font-medium">For Liturgical Churches</span>
+              </div>
+              <h2 className="text-3xl font-bold tracking-tight mb-6">
+                The Liturgy Builder
+              </h2>
+              <p className="text-zinc-400 leading-relaxed mb-6">
+                Pick any Sunday — Shepherd already knows where it falls in the
+                church year: season, feast, color, lectionary cycle, even the
+                Byzantine tone of the week. Choose your tradition and rite, and
+                it drafts a complete, print-ready order of service with propers,
+                rubrics, hymn suggestions, and an altar guild checklist.
+              </p>
+              <ul className="space-y-3 mb-8">
+                {[
+                  "Built on each tradition's real service books — not generic templates",
+                  "A liturgical calendar engine that computes Easter, feasts, and colors for any date",
+                  "Copyright-aware: quotes public-domain texts, cites licensed ones",
+                  "Edit every element, then print a clean bulletin",
+                ].map((point) => (
+                  <li key={point} className="flex items-start gap-2.5 text-sm text-zinc-400">
+                    <span className="text-purple-400 mt-0.5">&#10095;</span>
+                    <span>{point}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="flex flex-wrap gap-2">
+                {[
+                  "Episcopal (BCP 1979)",
+                  "ACNA (BCP 2019)",
+                  "LCMS (LSB)",
+                  "ELCA (ELW)",
+                  "WELS (CW21)",
+                  "Roman Catholic",
+                  "Eastern Orthodox",
+                  "United Methodist",
+                  "PC(USA)",
+                  "Convergence",
+                ].map((t) => (
+                  <span
+                    key={t}
+                    className="text-xs px-2.5 py-1 rounded-full border border-zinc-800 bg-zinc-900 text-zinc-400"
+                  >
+                    {t}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Bulletin mock */}
+            <div className="rounded-xl border border-zinc-800 bg-zinc-100 text-zinc-900 p-8 shadow-2xl" style={{ fontFamily: "Georgia, serif" }}>
+              <div className="mx-auto mb-3 h-1 w-20 rounded-full bg-purple-600" />
+              <div className="text-center mb-6">
+                <div className="text-lg font-bold">The Holy Eucharist: Rite Two</div>
+                <div className="text-xs text-zinc-600 mt-1">The Fifth Sunday in Lent · Year C</div>
+              </div>
+              <div className="text-[10px] uppercase tracking-[0.2em] text-center font-bold border-b border-zinc-300 pb-1.5 mb-3 text-zinc-700">
+                The Word of God
+              </div>
+              <div className="space-y-2.5 text-[13px]">
+                <p className="italic text-[11px]" style={{ color: "#9f1239" }}>
+                  The people standing, the Celebrant says
+                </p>
+                <div className="grid grid-cols-[5.5rem_1fr] gap-2">
+                  <span className="text-[10px] uppercase tracking-wide text-zinc-500 pt-0.5">Celebrant</span>
+                  <span>Bless the Lord who forgives all our sins.</span>
+                </div>
+                <div className="grid grid-cols-[5.5rem_1fr] gap-2">
+                  <span className="text-[10px] uppercase tracking-wide text-zinc-500 pt-0.5">People</span>
+                  <span className="font-semibold">His mercy endures for ever.</span>
+                </div>
+                <div className="flex items-baseline justify-between pt-1">
+                  <span className="font-semibold">The Collect of the Day</span>
+                  <span className="text-[10px] text-zinc-500">BCP p. 219</span>
+                </div>
+                <div className="flex items-baseline justify-between">
+                  <span className="font-semibold">The First Lesson</span>
+                  <span className="text-[10px] text-zinc-500">Isaiah 43:16–21</span>
+                </div>
+                <div className="flex items-baseline justify-between">
+                  <span><span className="mr-1">♪</span>Sequence Hymn</span>
+                  <span className="text-[10px] text-zinc-500">H82 474</span>
+                </div>
+                <div className="flex items-baseline justify-between">
+                  <span className="font-semibold">The Holy Gospel</span>
+                  <span className="text-[10px] text-zinc-500">John 12:1–8</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>

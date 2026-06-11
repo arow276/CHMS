@@ -104,6 +104,26 @@ html {
   animation: pulse-warm 2s ease-in-out infinite;
 }
 
+/* Print: bulletin pages render as clean paper — hide app chrome */
+@media print {
+  body {
+    background: #fff !important;
+    color: #111 !important;
+  }
+  aside {
+    display: none !important;
+  }
+  .flex.h-screen {
+    display: block !important;
+    height: auto !important;
+  }
+  main {
+    overflow: visible !important;
+    height: auto !important;
+    padding: 0 !important;
+  }
+}
+
 .stagger-1 { animation-delay: 0.1s; }
 .stagger-2 { animation-delay: 0.2s; }
 .stagger-3 { animation-delay: 0.3s; }

@@ -208,6 +208,7 @@ model Event {
   group   Group?  @relation(fields: [groupId], references: [id])
 
   attendances Attendance[]
+  liturgies   Liturgy[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -246,6 +247,39 @@ enum AttendanceStatus {
   PRESENT
   ABSENT
   LATE
+}
+
+// ──────────────────────────────────────────────
+// LITURGY BUILDER MODELS
+// ──────────────────────────────────────────────
+
+model Liturgy {
+  id          String        @id @default(cuid())
+  title       String
+  tradition   String // Registry id, e.g. "episcopal", "lcms", "roman_catholic"
+  serviceType String // Registry service id, e.g. "eucharist_rite2", "divine_service"
+  date        DateTime
+  status      LiturgyStatus @default(DRAFT)
+
+  liturgicalDay Json // Computed calendar snapshot: season, day name, color, cycles, feasts
+  options       Json  @default("{}") // Chosen rite options + special notes
+  document      Json? // Generated LiturgyDocument (sections, items, hymns, planning notes)
+
+  eventId String?
+  event   Event?  @relation(fields: [eventId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([date])
+  @@index([tradition])
+  @@index([status])
+  @@index([eventId])
+}
+
+enum LiturgyStatus {
+  DRAFT
+  FINAL
 }
 
 // ──────────────────────────────────────────────
